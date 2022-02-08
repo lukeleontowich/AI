@@ -1,0 +1,88 @@
+Missionaries and Cannibals
+By: Luke Leontowich
+
+
+To run:
+    type 'make' in the command line to compile
+    then type 'missionaries_cannibals' or './missionaries_cannibals'
+
+If not compiling, you can also type:
+    g++ -o missionaries_cannibals missionaries_cannibals.cpp
+    
+This code only uses native C++ libraries so compilation should work on all machines.
+
+Search algorithm idea:
+A* Search
+    * We have the depth which is the sum of how far each Missionaries & Cannibals
+      are from the other side.
+    * We have a heuristic which is calculated by taking the absolute value
+      of the difference between the cannibals and missionaries in the boat, and 
+      the two shores
+    * Then we calculate f by adding the depth and the heuristic
+    * The node that has the lowest f value will be the next node that is processed
+    * The search algorithm is implemented using a priority_queue in order to find 
+      the shortest path
+
+State:
+The state is represented by a struct that is as follows:
+
+typedef struct{
+    //  LHS[0] : number of missionaries on the Left Hand Side
+    //  LHS[1] : number of cannibals on the Left Hand Side
+    int LHS[2];
+
+    //  RHS[0] : number of missionaries on the Right Hand Side
+    //  RHS[1] : number of cannibals on the Right Hand Side
+    int RHS[2];
+
+    //  inboat[0] : number of missionaries on the boat
+    //  inboat[1] : number of cannibals on the boat
+    int inboat[2];
+
+    //  the total distance left to travel from the LHS to the RHS
+    int distance;
+
+    //  the sum of the absolute value of the difference between
+    //  the cannibals and missionaries on the LHS, boat, and RHS
+    int heurstic;
+
+    //  f = distance + heuristic
+    int f;
+} Node;
+
+Initial State:
+    The initial state is LHS = {3, 3}, inboat = {0, 0}, RHS = {0, 0}
+                         distance = 12, heuristic = 0, f = 12
+                         
+Action: 
+    We can do one of 10 things:
+        1) Take 1 missionary from LHS and put on boat
+        2) Take 2 misisonaries from LHS and put on boat
+        3) Take 1 Cannibals from LHS and put on boat
+        4) Take 2 Cannibals from LHS and put on boat
+        5) Take 1 missionary off the boat and unto the RHS
+        6) Take 1 Missionary and 1 Cannibals from LHS and put on boat
+        7) Take 2 missionaries off the boat and unto the RHS
+        8) Take 1 Cannibals off the boat and unto the RHS
+        9) Take 2 Cannibals off the boat and unto the RHS
+        10) Take 1 Missionary and 1 Cannibals off the baot and unto the RHS
+        Note) We don't need to go back to LHS because that is not an efficient
+              answer
+        
+Transition:
+    Is changing our state based on one of these actions
+    
+Goal State:
+    The goal state is LHS = {0, 0}, inboat = {0,0}, RHS = {3, 3},
+                            distance = 0, heuristic = 0, f = 0
+                            
+Action Costs:
+    We perorm 2 operations per action. taking someone(s) out of one area and
+    adding them to another area. We then perform checks on the action to see
+    if it is valid. This costs at most O(22), since we will check at most 22
+    different statements
+    
+
+
+This problem is challenging since there are many different states, and without the
+right search algorithm it is easy to end up at the same state multiple times

@@ -1,0 +1,24 @@
+Web Url
+By: Luke Leontowich
+
+To run:
+    type 'make' in the command line to compile
+    then type 'web_url' or './web_url'
+
+If not compiling, you can also type:
+    g++ -o web_url web_url.cpp
+
+Search idea:
+    Use birectional Search
+    Search both url strings at the same time
+    We can calculate the depth of each url by counting the '/' characters
+    Essential what I'm doing is the following
+    if url1.depth > url2.depth then
+        backtrack url1 to its parent
+    if url2.depth > url1.depth then
+        backtrack url2 to to its parent
+    if url1.depth == url2.depth then
+        check if url1 == url2 
+        if true then we found the path
+        if not go through algorithm again
+        if url1.depth == 2 or url2.dpth == 2 then we are at "https://" so return empty
